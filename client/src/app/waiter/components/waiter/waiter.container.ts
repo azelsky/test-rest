@@ -8,7 +8,10 @@ import { ConnectionService } from '../../../services/connection.service';
 })
 export class WaiterContainer {
   constructor(public connection: ConnectionService) {
-    this.connection.socket.auth = {isWaiter: true}
+    this.connection.socket.auth = {
+      isWaiter: true,
+      id: 74 // the save in DB
+    }
     this.connection.socket.connect();
   }
 }

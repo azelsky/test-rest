@@ -13,14 +13,16 @@ export class ConnectionService {
 
   socket: Socket = io('http://localhost:3000', {autoConnect: false});
 
-  public sendMessage(message: any) {
+  public sendMessage(message: string, to: number) {
     console.log('sendMessage: ', message)
-    this.socket.emit('message', message);
+    this.socket.emit('message', {
+      message,
+      to
+    });
   }
 
   public getNewMessage() {
     this.socket.on('message', (message) =>{
-      debugger;
       console.log('new message', message)
       this.message$.next(message);
     });
