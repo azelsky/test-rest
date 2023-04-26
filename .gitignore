@@ -29,7 +29,7 @@ client/.vscode/tasks.json
 .history/*
 
 # Miscellaneous
-/.angular/cache
+client/.angular/cache
 .sass-cache/
 /connect.lock
 /coverage
