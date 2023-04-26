@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "client": "npm start --prefix client",
+    "server": "npm start --prefix server",
     "watch": "npm run client"
   },
   "author": "",
