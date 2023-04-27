@@ -16,12 +16,6 @@ const table1 = {
 const sushiHouseAdminPanel = {
     id: 86,
     accountId: sushiHouse.id,
-    tables: [
-        {
-            tableId: table1.id,
-            waiterId: waiter.id
-        }
-    ]
 }
 
 const guest = {
@@ -43,16 +37,19 @@ const DB = {
     },
     adminPanels: {
         [sushiHouseAdminPanel.id]: sushiHouseAdminPanel
+    },
+    tableWaiters: {
+        1: {
+            tableId: table1.id,
+            waiterId: waiter.id
+        }
     }
 }
 
-function getWaiterByTableIdAndRestaurantId(tableId, restaurantId) {
-    for (let adminPanelId in DB.adminPanels) {
-        const adminPanel = DB.adminPanels[adminPanelId];
-        if (adminPanel.accountId === restaurantId) {
-            const table = adminPanel.tables.find((table) => table.tableId === tableId);
-            return table.waiterId;
-        }
+function getWaiterByTableId(tableId) {
+    for(let tableWaiterId in DB.tableWaiters) {
+        let tableWaiter = DB.tableWaiters[tableWaiterId];
+        if (tableId === tableWaiter.tableId) return tableWaiter.waiterId
     }
 }
 
@@ -60,8 +57,16 @@ function getDB() {
     return DB
 }
 
-module.exports = {
-    getWaiterByTableIdAndRestaurantId,
-    getDB,
+function addGuestToTable(guest, tableId) {
+    console.log(guest)
+    DB.guests[guest.id] = {
+        ...guest,
+        tableId
+    }
+}
 
+module.exports = {
+    getWaiterByTableId,
+    getDB,
+    addGuestToTable
 }

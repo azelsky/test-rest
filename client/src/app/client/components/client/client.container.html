@@ -1,6 +1,6 @@
 <div>Hello my lovely guest!</div>
 
-<button (click)="call()">Call</button>
+<button *ngIf="isGuest$ | async" (click)="call()">Call</button>
 
 <div>
   {{connection.getNewMessage() | async}}

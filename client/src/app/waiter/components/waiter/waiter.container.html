@@ -1,18 +1,21 @@
-<div>
-  <div>Requests</div>
-  <ul>
-    <li>Lisa <button>submit</button></li>
-  </ul>
-</div>
-
-<div>
-  <div>
-    <span>Table №5 call you </span>
-    <button>I'm on my way</button>
-    <button>2Min</button>
-    <button>5Min</button>
+<h2>Waiter Panel</h2>
+<ng-container *ngIf="(requests$ | async) as requests">
+  <div *ngIf="requests.length">
+    <div>Requests</div>
+    <ul>
+      <li *ngFor="let request of requests">{{request.from.name}} <button (click)="submit(request)">submit</button></li>
+    </ul>
   </div>
-</div>
+</ng-container>
 
-{{connection.getNewMessage() | async}}
+<ng-container *ngIf="(connection.getNewMessage() | async) as message">
+  <div>
+    <div>
+      <span>Table №5 call you </span>
+      <button>I'm on my way</button>
+      <button>2Min</button>
+      <button>5Min</button>
+    </div>
+  </div>
+</ng-container>
 

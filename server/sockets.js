@@ -1,3 +1,5 @@
+const { addGuestToTable, getDB} = require("./db");
+
 function listen(io) {
     // io.use((socket, next) => {
     //     const {name, table, isWaiter} = socket.handshake.auth || {};
@@ -16,11 +18,9 @@ function listen(io) {
     // })
 
     io.on('connection', (socket) => {
-        const { isWaiter, id } = socket.handshake.auth || {};
-        if (isWaiter) {
-            console.log('isWaiter', id)
-            socket.join(id)
-        }
+        const { id } = socket.handshake.auth || {};
+
+        socket.join(id)
 
         console.log('someone connected');
 
@@ -33,6 +33,22 @@ function listen(io) {
         socket.on('disconnect', () => {
             console.log('disconnected');
         });
+
+        socket.on('requestToSitAtTheTable', ({waiterId, id, name, tableId}) => {
+            socket.to(waiterId).emit('requestToSitAtTheTable', {
+                tableId,
+                from: {
+                    id,
+                    name,
+                }
+            })
+        })
+
+        socket.on('allowToSitAtTheTable', ({ guest, tableId }) => {
+            addGuestToTable(guest, tableId)
+            console.log(getDB())
+            socket.to(guest.id).emit('allowToSitAtTheTable')
+        })
     })
 }
 

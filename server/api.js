@@ -12,7 +12,7 @@ app.get('/api/:accountId/my-waiter/:tableId', (req, res) => {
     const tableId = Number(req.params.tableId);
     const accountId = req.params.accountId;
 
-    const waiterId = DB.getWaiterByTableIdAndRestaurantId(tableId, accountId);
+    const waiterId = DB.getWaiterByTableId(tableId);
 
     res.status(200).json({
         waiterId
