@@ -13,7 +13,7 @@ export class WaiterContainer {
   constructor(public connection: ConnectionService) {
     this.connection.socket.auth = {
       isWaiter: true,
-      id: 74 // the save in DB
+      id: 'a3483690-f194-4fc2-b364-879d92720842' // the save in DB
     }
     this.connection.socket.connect();
 
@@ -21,7 +21,7 @@ export class WaiterContainer {
   }
 
   submit(data: IRequest) {
-    this.connection.allowToSitAtTheTable(data.tableId, data.from);
+    this.connection.allowToSitAtTheTable(data.from.id);
 
     this.connection.requests$.next(this.connection.requests$.value.filter(request => request.from.id !== data.from.id
     ))

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { io } from 'socket.io-client';
 import { Socket } from 'socket.io-client/build/esm/socket';
 
@@ -7,7 +7,7 @@ export interface IGuest {
   id: string, name: string
 }
 export interface IRequest {
-  tableId: number;
+  tableId: string;
   from: IGuest
 }
 
@@ -19,15 +19,15 @@ export class ConnectionService {
   public error$: BehaviorSubject<string> = new BehaviorSubject('');
   public isGuest$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public requests$: BehaviorSubject<IRequest[]> = new BehaviorSubject<IRequest[]>([]);
+  public setId$: Subject<string> = new Subject<string>();
   constructor() {}
 
   socket: Socket = io('http://localhost:3000', {autoConnect: false});
 
-  public sendMessage(message: string, to: number) {
-    console.log('sendMessage: ', message)
-    this.socket.emit('message', {
+  public callWaiter(message: string, tableId: string) {
+    this.socket.emit('callWaiter', {
       message,
-      to
+      tableId
     });
   }
 
@@ -58,26 +58,17 @@ export class ConnectionService {
     return this.requests$.asObservable();
   }
 
-  public allowToSitAtTheTable(tableId: number, guest: IGuest) {
+  public allowToSitAtTheTable(guestId: string) {
     // toDO add decline
     this.socket.emit('allowToSitAtTheTable', {
-      tableId,
-      guest
-    })
-  }
-
-  public requestToSitAtTheTable(tableId: number, waiterId: number, name: string, id: string) {
-    this.socket.emit('requestToSitAtTheTable', {
-      tableId,
-      waiterId,
-      name,
-      id
+      guestId
     })
   }
 
   public isGuest() {
-    this.socket.on('allowToSitAtTheTable', () => {
-      this.isGuest$.next(true)
+    this.socket.on('allowToSitAtTheTable', (id: string) => {
+      this.isGuest$.next(true);
+      this.setId$.next(id);
     })
 
     return this.isGuest$.asObservable();

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ConnectionService } from '../../../services/connection.service';
 import { ClientService } from '../../services/client.service';
-import { v4 as uuid } from 'uuid';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -10,8 +9,8 @@ import { Observable } from 'rxjs';
   styleUrls: ['./client.container.scss']
 })
 export class ClientContainer implements OnInit{
-  waiterId: number | null = null;
-  id: string = uuid()
+  tableId: string | null = null;
+  id: string | null = null;
   isGuest$!: Observable<boolean>;
 
   constructor(
@@ -22,22 +21,26 @@ export class ClientContainer implements OnInit{
   }
 
   ngOnInit() {
-    const tableId = 45; // value from DB
-    const accountId = 'sushi_house'; // value from DB
+    this.tableId = '422a76c9-24c8-417f-a37b-5532fbbecb11';
     const name = 'Stefan'; // random
-    this.clientService.getWaiterId(accountId, tableId.toString()).subscribe((res: any) => {
-      this.waiterId = res.waiterId;
-      this.connection.socket.auth = {
-        id: this.id
-      }
-      this.connection.socket.connect();
 
-      // toDo maybe user logedIn?????
-      this.connection.requestToSitAtTheTable(tableId, res.waiterId, name, this.id)
+    this.id = localStorage.getItem('id');
+
+    this.connection.socket.auth = {
+      id: this.id,
+      name,
+      tableId: this.tableId
+    }
+    this.connection.socket.connect();
+
+    this.connection.setId$.subscribe((id: string) => {
+      this.id = id;
+
+      localStorage.setItem('id', id);
     })
   }
 
   call() {
-    this.connection.sendMessage('Please come', <number>this.waiterId)
+    this.connection.callWaiter('Please come', <string>this.tableId)
   }
 }
