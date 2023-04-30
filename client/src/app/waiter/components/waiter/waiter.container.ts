@@ -13,7 +13,7 @@ export class WaiterContainer {
   constructor(public connection: ConnectionService) {
     this.connection.socket.auth = {
       isWaiter: true,
-      id: 'a3483690-f194-4fc2-b364-879d92720842' // the save in DB
+      id: 'bfd64406-ea7b-48fb-a466-9bddf817e303' // the save in DB
     }
     this.connection.socket.connect();
 

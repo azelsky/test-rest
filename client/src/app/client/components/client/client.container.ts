@@ -21,7 +21,7 @@ export class ClientContainer implements OnInit{
   }
 
   ngOnInit() {
-    this.tableId = '422a76c9-24c8-417f-a37b-5532fbbecb11';
+    this.tableId = 'b788fd8b-6139-481d-9bf5-0b89d8c27bf9';
     const name = 'Stefan'; // random
 
     this.id = localStorage.getItem('id');

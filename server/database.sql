@@ -1,52 +1,52 @@
-create Table accounts(
+CREATE TABLE accounts(
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(255)
 );
 
-create Table waiters(
+CREATE TABLE waiters(
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(50),
-    account_id UUID REFERENCES account (id)
+    account_id UUID REFERENCES accounts (id)
 );
 
-create Table tables(
+CREATE TABLE tables(
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     num INTEGER,
-    account_id UUID REFERENCES account (id)
+    account_id UUID REFERENCES accounts (id)
 );
 
-create Table guests (
+CREATE TABLE guests (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(50),
     approved BOOLEAN,
-    table_id UUID REFERENCES res_table (id)
+    table_id UUID REFERENCES tables (id)
 );
 
-create Table waiter_table_assignment (
+CREATE TABLE waiter_table_assignment (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    table_id UUID REFERENCES res_table (id),
-    waiter_id UUID REFERENCES waiter (id)
+    table_id UUID REFERENCES tables (id),
+    waiter_id UUID REFERENCES waiters (id)
 );
 
-INSERT INTO account (name) VALUES ('SUSHI HOUSE');
+INSERT INTO accounts (name) VALUES ('SUSHI HOUSE');
 
 INSERT INTO
-    waiter (name, account_id)
+    waiters (name, account_id)
 VALUES
-    ('Sofia', '7620e662-b61c-43bc-94c4-3607e640494f'),
-    ('Yana', '7620e662-b61c-43bc-94c4-3607e640494f');
+    ('Sofia', '8de0588d-68bd-4712-abf9-9291864ccb23'),
+    ('Yana', '8de0588d-68bd-4712-abf9-9291864ccb23');
 
 INSERT INTO
-    res_table (num, account_id)
+    tables (num, account_id)
 VALUES
-    (1, '7620e662-b61c-43bc-94c4-3607e640494f'),
-    (2, '7620e662-b61c-43bc-94c4-3607e640494f');
+    (1, '8de0588d-68bd-4712-abf9-9291864ccb23'),
+    (2, '8de0588d-68bd-4712-abf9-9291864ccb23');
 
 INSERT INTO
-    table_of_waiter (table_id, waiter_id)
+    waiter_table_assignment (table_id, waiter_id)
 VALUES
-    ('4b4b2a09-5d9f-46cd-99be-fbaa78e22a87', '6d3cee35-23b0-484a-955b-dc3acc7151f7'),
-    ('422a76c9-24c8-417f-a37b-5532fbbecb11', 'a3483690-f194-4fc2-b364-879d92720842');
+    ('44885c03-1337-4d87-aef9-a8aee824c4c3', '7366dde2-d1d0-4894-adcf-5823362bfdb4'),
+    ('b788fd8b-6139-481d-9bf5-0b89d8c27bf9', 'bfd64406-ea7b-48fb-a466-9bddf817e303');
 
 UPDATE waiter set name = 'Maria' where id = 2
 
